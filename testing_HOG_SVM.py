@@ -1,6 +1,7 @@
 from skimage.feature import hog
 from skimage.transform import pyramid_gaussian
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
+import joblib
 from skimage import color
 from imutils.object_detection import non_max_suppression
 import imutils
@@ -25,13 +26,13 @@ def sliding_window(image, stepSize, windowSize):# image is the input, step size 
             yield (x, y, image[y: y + windowSize[1], x:x + windowSize[0]])
 #%%
 # Upload the saved svm model:
-model = joblib.load('Inser\Path\of_the_trained\SVM-model\here')
+model = joblib.load(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\model_name.npy")
 
 # Test the trained classifier on an image below!
 scale = 0
 detections = []
 # read the image you want to detect the object in:
-img= cv2.imread("Insert\Path\of_the_image\here")
+img= cv2.imread(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Positive\car_0022.jpg")
 
 # Try it with image resized if the image is too big
 img= cv2.resize(img,(300,200)) # can change the size to default by commenting this code out our put in a random number
@@ -47,7 +48,7 @@ for resized in pyramid_gaussian(img, downscale=1.5): # loop over each layer of t
         # if the window does not meet our desired window size, ignore it!
         if window.shape[0] != winH or window.shape[1] !=winW: # ensure the sliding window has met the minimum size requirement
             continue
-        window=color.rgb2gray(window)
+        #window=color.rgb2gray(window)
         fds = hog(window, orientations, pixels_per_cell, cells_per_block, block_norm='L2')  # extract HOG features from the window captured
         fds = fds.reshape(1, -1) # re shape the image to make a silouhette of hog
         pred = model.predict(fds) # use the SVM model to make a prediction on the HOG features extracted from the window
@@ -69,20 +70,20 @@ sc = [score[0] for (x, y, score, w, h) in detections]
 print("detection confidence score: ", sc)
 sc = np.array(sc)
 pick = non_max_suppression(rects, probs = sc, overlapThresh = 0.3)
-
+cv2.imshow("Raw Detections after NMS", img)
 # the peice of code above creates a raw bounding box prior to using NMS
 # the code below creates a bounding box after using nms on the detections
 # you can choose which one you want to visualise, as you deem fit... simply use the following function:
 # cv2.imshow in this right place (since python is procedural it will go through the code line by line).
         
 for (xA, yA, xB, yB) in pick:
-    cv2.rectangle(img, (xA, yA), (xB, yB), (0,255,0), 2)
-cv2.imshow("Raw Detections after NMS", img)
+    cv2.rectangle(img, (xA, yA), (xB, yB), (0,255,0), 3)
+
 #### Save the images below
- = cv2.waitKey(0) & 0xFF 
+cv2.waitKey(0) & 0xFF 
 if k == 27:             #wait for ESC key to exit
     cv2.destroyAllWindows()
 elif k == ord('s'):
-    cv2.imwrite('Path\to_the_directory\of_saved_image.png',img)
+    cv2.imwrite(r'C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM',img)
     cv2.destroyAllWindows()
 

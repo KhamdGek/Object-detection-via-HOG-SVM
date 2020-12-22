@@ -39,7 +39,8 @@ while True:
                 found_filtered.append(r)
         draw_detections(img, found) # using the predefined bounding box to encapsulate the human detected within the bounding box.
         draw_detections(img, found_filtered, 3) # further filtering the box to improve visualisation.
-        print('%d (%d) found' % (len(found_filtered), len(found))) # this will produce the output of the number of humans found in the actual command box)
+        
+        print("%d (%d) found" % (len(found_filtered), len(found))) # this will produce the output of the number of humans found in the actual command box)
     cv2.imshow('img', img) # finally showing the resulting image captured from the webcam.
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break # defining a key to quit and stop all processes. The key is 'q'
