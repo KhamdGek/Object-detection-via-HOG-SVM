@@ -31,9 +31,9 @@ threshold = .3
 
 # define path to images:
 
-pos_im_path = r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Positive" # This is the path of our positive input dataset
+pos_im_path = r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\PositiveImg\Far" # This is the path of our positive input dataset
 # define the same for negatives
-neg_im_path= r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Negative"
+neg_im_path= r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Negativeimg\Far"
 
 # read the image files:
 pos_im_listing = os.listdir(pos_im_path) # it will read all the files in the positive image path (so all the required images)
@@ -50,7 +50,7 @@ labels = []
 
 for file in pos_im_listing: #this loop enables reading the files in the pos_im_listing variable one by one
     img = Image.open(pos_im_path + '\\' + file) # open the file
-    img = img.resize((64,128))
+    img = img.resize((128,128))
     gray = img.convert('L') # convert the image into single channel i.e. RGB to grayscale
     # calculate HOG for positive features
     fd = hog(gray, orientations, pixels_per_cell, cells_per_block, block_norm='L2', feature_vector=True)# fd= feature descriptor
@@ -60,7 +60,7 @@ for file in pos_im_listing: #this loop enables reading the files in the pos_im_l
 # Same for the negative images
 for file in neg_im_listing:
     img= Image.open(neg_im_path + '\\' + file)
-    img = img.resize((64,128))
+    img = img.resize((128,128))
     gray= img.convert('L')
     # Now we calculate the HOG for negative features
     fd = hog(gray, orientations, pixels_per_cell, cells_per_block, block_norm='L2', feature_vector=True) 

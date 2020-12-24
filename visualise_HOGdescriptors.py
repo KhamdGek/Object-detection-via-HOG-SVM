@@ -11,7 +11,7 @@ from skimage.feature import hog
 from skimage import data, color, exposure
 from PIL import Image
 #%%
-img = io.imread(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Positive\car_0000.jpg")
+img = io.imread(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\PositiveImg\Far\image0002.png")
 #im= Image.open(r"Insert\Image\Path\Here.jpg")
 image = color.rgb2gray(img)
 

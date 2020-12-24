@@ -1,6 +1,5 @@
 from skimage.feature import hog
 from skimage.transform import pyramid_gaussian
-#from sklearn.externals import joblib
 import joblib
 from skimage import color
 from imutils.object_detection import non_max_suppression
@@ -32,13 +31,13 @@ model = joblib.load(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-de
 scale = 0
 detections = []
 # read the image you want to detect the object in:
-img= cv2.imread(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Positive\car_0022.jpg")
+img= cv2.imread(r"C:\Users\ASUS\Desktop\ML ppr\objectdetect_HOGSVM\Object-detection-via-HOG-SVM\Training\Negativeimg\Far\image0967.png")
 
 # Try it with image resized if the image is too big
-img= cv2.resize(img,(300,200)) # can change the size to default by commenting this code out our put in a random number
+img= cv2.resize(img,(220,220)) # can change the size to default by commenting this code out our put in a random number
 
 # defining the size of the sliding window (has to be, same as the size of the image in the training data)
-(winW, winH)= (64,128)
+(winW, winH)= (128,128)
 windowSize=(winW,winH)
 downscale=1.5
 # Apply sliding window:
@@ -63,14 +62,16 @@ for resized in pyramid_gaussian(img, downscale=1.5): # loop over each layer of t
     scale+=1
     
 clone = resized.copy()
-for (x_tl, y_tl, _, w, h) in detections:
-    cv2.rectangle(img, (x_tl, y_tl), (x_tl + w, y_tl + h), (0, 0, 255), thickness = 2)
+
+#for (x_tl, y_tl, _, w, h) in detections:
+#    cv2.rectangle(img, (x_tl, y_tl), (x_tl + w, y_tl + h), (0, 0, 255), thickness = 2)
 rects = np.array([[x, y, x + w, y + h] for (x, y, _, w, h) in detections]) # do nms on the detected bounding boxes
+
 sc = [score[0] for (x, y, score, w, h) in detections]
 print("detection confidence score: ", sc)
 sc = np.array(sc)
 pick = non_max_suppression(rects, probs = sc, overlapThresh = 0.3)
-cv2.imshow("Raw Detections after NMS", img)
+
 # the peice of code above creates a raw bounding box prior to using NMS
 # the code below creates a bounding box after using nms on the detections
 # you can choose which one you want to visualise, as you deem fit... simply use the following function:
@@ -78,7 +79,7 @@ cv2.imshow("Raw Detections after NMS", img)
         
 for (xA, yA, xB, yB) in pick:
     cv2.rectangle(img, (xA, yA), (xB, yB), (0,255,0), 3)
-
+cv2.imshow("Raw Detections after NMS", img)
 #### Save the images below
 cv2.waitKey(0) & 0xFF 
 if k == 27:             #wait for ESC key to exit
